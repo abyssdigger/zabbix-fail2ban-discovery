@@ -52,10 +52,26 @@ zabbix_export:
           description: 'Discovery of jails from fail2ban daemon.'
           item_prototypes:
             - uuid: 8cc0b05211fc4278b2feb46727a4ca97
-              name: 'Fail2ban {#JAIL} banned IPs'
-              key: 'fail2ban.status[{#JAIL}]'
+              name: 'Fail2ban {#JAIL} banned IPs count'
+              key: 'fail2ban.bancount[{#JAIL}]'
               history: 7d
               units: '!count'
+              tags:
+                - tag: App
+                  value: Fail2ban
+            - uuid: 61c969be21704d139740b62a20781417
+              name: 'Fail2ban {#JAIL} banned IP list'
+              key: 'fail2ban.banlist[{#JAIL}]'
+              history: 7d
+              tags:
+                - tag: App
+                  value: Fail2ban
+          trigger_prototypes:
+            - uuid: df6cec3320d840cbac51bceec35ef26c
+              expression: 'last(/Template Fail2ban/proc.num[fail2ban.bancount[{#JAIL}]])>0'
+              name: 'Fail2ban {#JAIL} has banned IPs'
+              priority: HIGH
+              description: 'Jail {#JAIL} has banned IPs.'
               tags:
                 - tag: App
                   value: Fail2ban
@@ -67,7 +83,7 @@ zabbix_export:
                 - color: FF0000
                   item:
                     host: 'Template Fail2ban'
-                    key: 'fail2ban.status[{#JAIL}]'
+                    key: 'fail2ban.bancount[{#JAIL}]'
       tags:
         - tag: App
           value: Fail2ban
