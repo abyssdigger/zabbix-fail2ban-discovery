@@ -74,7 +74,7 @@ zabbix_export:
                   name: 'Fail2ban {#JAIL} has banned IPs.'
                   priority: HIGH
                   manual_close: 'YES'
-                  description: 'Jail {#JAIL} has banned IPs: {fail2ban.banlist[{#JAIL}]}'
+                  description: 'Jail {#JAIL} has banned IPs.'
                   tags:
                     - tag: App
                       value: Fail2ban
