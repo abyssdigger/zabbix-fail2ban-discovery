@@ -12,6 +12,7 @@ zabbix_export:
         Developed by initMAX s.r.o.,
         Tomas Hermanek
         https://github.com/hermanekt/zabbix-fail2ban-discovery-
+        Adopted by abyssdigger (also present on github)
       groups:
         - name: Templates
       items:
@@ -69,11 +70,11 @@ zabbix_export:
                   value: Fail2ban
               trigger_prototypes:
                 - uuid: df6cec3320d840cbac51bceec35ef26c
-                  expression: 'last(/Template Fail2ban/fail2ban.bancount[{#JAIL}])>0'
-                  name: 'Fail2ban {#JAIL} has banned IPs'
+                  expression: 'length(last(/Template Fail2ban/fail2ban.banlist[{#JAIL}]))>3'
+                  name: 'Fail2ban {#JAIL} has banned IPs.'
                   priority: HIGH
                   manual_close: 'YES'
-                  description: 'Jail {#JAIL} has banned IPs.'
+                  description: 'Jail {#JAIL} has banned IPs: {fail2ban.banlist[{#JAIL}]}'
                   tags:
                     - tag: App
                       value: Fail2ban
