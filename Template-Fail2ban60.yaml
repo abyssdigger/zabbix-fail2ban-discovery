@@ -62,10 +62,21 @@ zabbix_export:
             - uuid: 61c969be21704d139740b62a20781417
               name: 'Fail2ban {#JAIL} banned IP list'
               key: 'fail2ban.banlist[{#JAIL}]'
+              value_type: CHAR
               history: 7d
               tags:
                 - tag: App
                   value: Fail2ban
+              triggers:
+                - uuid: df6cec3320d840cbac51bceec35ef26c
+                  expression: 'last(/Template Fail2ban/fail2ban.bancount[{#JAIL}])>0'
+                  name: 'Fail2ban {#JAIL} has banned IPs'
+                  priority: HIGH
+                  manual_close: 'YES'
+                  description: 'Jail {#JAIL} has banned IPs.'
+                  tags:
+                    - tag: App
+                      value: Fail2ban
           graph_prototypes:
             - uuid: b151e34af81548b1b92cf0a6b36cdee7
               name: 'Count of banned IPs on jail {#JAIL}'
