@@ -67,7 +67,7 @@ zabbix_export:
               tags:
                 - tag: App
                   value: Fail2ban
-              triggers:
+              trigger_prototypes:
                 - uuid: df6cec3320d840cbac51bceec35ef26c
                   expression: 'last(/Template Fail2ban/fail2ban.bancount[{#JAIL}])>0'
                   name: 'Fail2ban {#JAIL} has banned IPs'
