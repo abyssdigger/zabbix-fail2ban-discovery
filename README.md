@@ -1,23 +1,24 @@
-# Fail2Ban template for Zabbix
+# Fail2Ban template for Zabbix (updated clone of [hermanekt](https://github.com/hermanekt/zabbix-fail2ban-discovery-))
 ### Features:
 
 - Automatic discovery of jails
 - Monitor service status
 - Monitor jails
 - Jails graph
+- Banned IP list value with trigger _(added by abyssdigger)_
 
 ## Installation
 ### 1. Set configuration file
-Download the latest version of configuration file `fail2ban.conf` from the [repo](https://github.com/hermanekt/zabbix-fail2ban-discovery-).
+Download the latest version of configuration file `fail2ban.conf` from the [repo](https://github.com/abyssdigger/zabbix-fail2ban-discovery).
 Put the file here `/etc/zabbix/zabbix_agentd.d/fail2ban.conf` or here for zabbix agent 2 `/etc/zabbix/zabbix_agentd2.d/fail2ban.conf`
 
 Zabbix Agent
 ```console
-wget https://raw.githubusercontent.com/hermanekt/zabbix-fail2ban-discovery-/master/fail2ban.conf -O /etc/zabbix/zabbix_agentd.d/fail2ban.conf
+wget https://raw.githubusercontent.com/abyssdigger/zabbix-fail2ban-discovery/master/fail2ban.conf -O /etc/zabbix/zabbix_agentd.d/fail2ban.conf
 ```
 Zabbix Agent 2
 ```console
-wget https://raw.githubusercontent.com/hermanekt/zabbix-fail2ban-discovery-/master/fail2ban.conf -O /etc/zabbix/zabbix_agent2.d/fail2ban.conf
+wget https://raw.githubusercontent.com//abyssdigger/zabbix-fail2ban-discovery/master/fail2ban.conf -O /etc/zabbix/zabbix_agent2.d/fail2ban.conf
 ```
 
 ### 2. Grant access to Fail2Ban
@@ -49,28 +50,33 @@ systemctl restart zabbix-agent2
 
 Zabbix Agent
 ```console
-root@server:~$ sudo -u zabbix zabbix_agent -c /etc/zabbix/zabbix_agent.conf -t fail2ban.discovery
-fail2ban.discovery [s|{"data":[{"{#JAIL}":"imapd"}, {"{#JAIL}":"sendmail-reject"}, {"{#JAIL}":"sshd"}, {"{#JAIL}":"wordpress"}]}]
+sudo -u zabbix zabbix_agent -c /etc/zabbix/zabbix_agent.conf -t fail2ban.discovery
+#> fail2ban.discovery                            [s|{"data":[{"{#JAIL}":"proxmox-gui"}, {"{#JAIL}":"sshd"}]}]
 
-root@server:~$ sudo -u zabbix zabbix_agent -c /etc/zabbix/zabbix_agent.conf -t fail2ban.status['sshd']
-fail2ban.status[sshd]                         [s|191]
+sudo -u zabbix zabbix_agent -c /etc/zabbix/zabbix_agent.conf -t fail2ban.bancount['sshd']
+#> fail2ban.bancount[sshd]                       [s|1]
+
+sudo -u zabbix zabbix_agent -c /etc/zabbix/zabbix_agent.conf -t fail2ban.banlist['sshd']
+#> fail2ban.banlist[sshd]                        [s|XXX.XXX.XXX.XXX]
 ```
 
 Zabbix Agent 2
 ```console
-root@server:~$ sudo -u zabbix zabbix_agent2 -c /etc/zabbix/zabbix_agent2.conf -t fail2ban.discovery
-fail2ban.discovery [s|{"data":[{"{#JAIL}":"imapd"}, {"{#JAIL}":"sendmail-reject"}, {"{#JAIL}":"sshd"}, {"{#JAIL}":"wordpress"}]}]
+sudo -u zabbix zabbix_agent2 -c /etc/zabbix/zabbix_agent2.conf -t fail2ban.discovery
+#> fail2ban.discovery                            [s|{"data":[{"{#JAIL}":"proxmox-gui"}, {"{#JAIL}":"sshd"}]}]
 
-root@server:~$ sudo -u zabbix zabbix_agent2 -c /etc/zabbix/zabbix_agent2.conf -t fail2ban.status['sshd']
-fail2ban.status[sshd]                         [s|191]
+sudo -u zabbix zabbix_agent2 -c /etc/zabbix/zabbix_agent2.conf -t fail2ban.bancount['sshd']
+#> fail2ban.bancount[sshd]                       [s|1]
+
+sudo -u zabbix zabbix_agent2 -c /etc/zabbix/zabbix_agent2.conf -t fail2ban.banlist['sshd']
+#> fail2ban.banlist[sshd]                        [s|XXX.XXX.XXX.XXX]
 ```
 
 The response above with list of jails means that everything works fine. 
 
 ### Configure the Zabbix Server
 1. Import the template file into Zabbix Server (this operation is done only once).
-##### There is 2 verisons, for Ubuntu/Debian and for other systems!
 2. Change the update Interval to what pleases you (default is 1 minute).
 3. Add the template to your hosts.
 
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=GEH7YJEBWTFWE&currency_code=USD&source=url)
+Thanks to [hermanekt](https://github.com/hermanekt)
