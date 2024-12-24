@@ -55,6 +55,7 @@ zabbix_export:
             - uuid: 8cc0b05211fc4278b2feb46727a4ca97
               name: 'Fail2ban {#JAIL} banned IPs count'
               key: 'fail2ban.bancount[{#JAIL}]'
+              delay: '1m'
               history: 7d
               units: '!count'
               tags:
@@ -63,6 +64,7 @@ zabbix_export:
             - uuid: 61c969be21704d139740b62a20781417
               name: 'Fail2ban {#JAIL} banned IP list'
               key: 'fail2ban.banlist[{#JAIL}]'
+              delay: '1m'
               value_type: CHAR
               history: 7d
               tags:
